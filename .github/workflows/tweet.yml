@@ -2,7 +2,7 @@ name: Tweet Hello World
 
 on:
   schedule:
-    - cron: '42 6 * * *'  # Runs daily at 6:30 am UTC
+    - cron: '17 8 * * *'  # Runs daily at 6:42 am UTC
 
 jobs:
   tweet:

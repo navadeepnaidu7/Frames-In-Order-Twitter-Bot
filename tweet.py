@@ -1,10 +1,20 @@
-import os
 import tweepy
+import os
 
-auth = tweepy.OAuthHandler(os.environ['API_KEY'], os.environ['API_SECRET_KEY'])
-auth.set_access_token(os.environ['ACCESS_TOKEN'], os.environ['ACCESS_TOKEN_SECRET'])
+# environment variables
+consumer_key = os.environ.get("CONSUMER_KEY")
+consumer_secret = os.environ.get("CONSUMER_SECRET")
+access_token = os.environ.get("ACCESS_TOKEN")
+access_token_secret = os.environ.get("ACCESS_TOKEN_SECRET")
 
-api = tweepy.API(auth)
+client = tweepy.Client(
+    consumer_key=consumer_key,
+    consumer_secret=consumer_secret,
+    access_token=access_token,
+    access_token_secret=access_token_secret
+)
 
-# Tweet
-api.update_status("Hello, world!")
+# Create Tweet (rest of the code remains the same)
+response = client.create_tweet(
+    text="Hello World!"
+)
