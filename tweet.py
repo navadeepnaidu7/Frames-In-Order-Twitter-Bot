@@ -1,3 +1,4 @@
+import os
 import tweepy
 
 auth = tweepy.OAuthHandler(os.environ['API_KEY'], os.environ['API_SECRET_KEY'])
