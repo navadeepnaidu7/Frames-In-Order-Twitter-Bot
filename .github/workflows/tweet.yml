@@ -1,0 +1,21 @@
+name: Tweet Hello World
+
+on:
+  schedule:
+    - cron: '30 6 * * *'  # Runs daily at 6:30 am UTC
+
+jobs:
+  tweet:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - run: pip install tweepy
+      - env:
+          API_KEY: ${{ secrets.API_KEY }}
+          API_SECRET_KEY: ${{ secrets.API_SECRET_KEY }}
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
+        run: python tweet.py
