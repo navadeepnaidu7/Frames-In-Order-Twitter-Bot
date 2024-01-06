@@ -17,9 +17,13 @@ jobs:
         with:
           python-version: '3.x'  # Specify your desired Python version
       - name: Install dependencies
-        run: pip install -r requirements.txt  # Install required libraries
+        run: |
+          pip install tweepy==4.18.0  # Replace with your actual dependencies
+          pip install requests
+          # Add more `pip install` commands for additional dependencies
       - name: Run Twitter script
-        run: python tweet.py  # Execute your Python script (assuming it's in the root directory)
+        run: python tweet.py  # Execute your Python script
+
         env:
           BEARER_TOKEN: ${{ secrets.Twitter_test_environment.BEARER_TOKEN }}  # Access secrets from the specific environment
           CONSUMER_KEY: ${{ secrets.Twitter_test_environment.CONSUMER_KEY }}
