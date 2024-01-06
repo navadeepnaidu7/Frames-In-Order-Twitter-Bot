@@ -7,26 +7,23 @@ on:
     - cron: '0 12 * * *'  # Run daily at 12:00 UTC (adjust as needed)
 
 jobs:
-  tweet-job:
+  build:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v3  # Checkout the repository code
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.x'  # Specify your desired Python version
-      - name: Install dependencies
-        run: |
-          pip install tweepy==4.14.0
-          pip install requests
-          # Add more `pip install` commands for additional dependencies
-      - name: Run Twitter script
-        run: python tweet.py  # Execute your Python script
-
-        env:
-          BEARER_TOKEN: ${{ secrets.Twitter_test_environment.BEARER_TOKEN }}  # Access secrets from the specific environment
-          CONSUMER_KEY: ${{ secrets.Twitter_test_environment.CONSUMER_KEY }}
-          CONSUMER_SECRET: ${{ secrets.Twitter_test_environment.CONSUMER_SECRET }}
-          ACCESS_TOKEN: ${{ secrets.Twitter_test_environment.ACCESS_TOKEN }}
-          ACCESS_TOKEN_SECRET: ${{ secrets.Twitter_test_environment.ACCESS_TOKEN_SECRET }}
+    - name: Check out code
+      uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    - name: Run script
+      run: python tweet.py
+      env:
+        CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
+        CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
+        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
