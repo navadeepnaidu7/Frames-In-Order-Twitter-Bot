@@ -22,12 +22,13 @@ client = tweepy.Client(
     wait_on_rate_limit=True,
 )
 
-# folder having images
-image_folder = "C:/Users/navad/Desktop/test" 
+# Determine image folder relative to the script's location
+script_dir = os.path.dirname(__file__)
+image_folder = os.path.join(script_dir, "images")  # Assuming images are in the "images" subfolder
 
 image_files = [f for f in os.listdir(image_folder) if f.lower().endswith(('.jpg', '.jpeg', '.png'))]
 
-# Tweet with each image, caption and random hashtag 
+# Tweet with each image, caption, and random hashtag
 for image_file in image_files:
     image_path = os.path.join(image_folder, image_file)
 
