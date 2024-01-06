@@ -18,7 +18,7 @@ jobs:
           python-version: '3.x'  # Specify your desired Python version
       - name: Install dependencies
         run: |
-          pip install tweepy==4.18.0  # Replace with your actual dependencies
+          pip install tweepy==4.18.0
           pip install requests
           # Add more `pip install` commands for additional dependencies
       - name: Run Twitter script
