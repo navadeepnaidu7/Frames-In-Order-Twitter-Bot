@@ -8,7 +8,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: checkout repo content
+    - name: Checkout repo content
       uses: actions/checkout@v2
 
     - name: Set up Python
@@ -19,14 +19,8 @@ jobs:
     - name: Install dependencies
       run: pip install tweepy pydrive oauth2client requests
 
-    - name: run the bot
-      run: |
-        python tweet.py
-        git config --global user.email "github-actions[bot]@users.noreply.github.com"
-        git config --global user.name "Github Actions"
-        git add last_tweet_index.txt
-        git commit -m "Update last tweet index"
-        git push
+    - name: Run the new tweet script
+      run: python tweet.py
       env:
         BEARER_TOKEN: ${{ secrets.BEARER_TOKEN }}
         CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
@@ -36,3 +30,16 @@ jobs:
         CLIENT_ID: ${{ secrets.CLIENT_ID }}
         CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
         REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
+
+    - name: Configure Git
+      run: |
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git config --global user.name "Github Actions"
+
+    - name: Add and commit changes
+      run: |
+        git add last_tweet_index.txt
+        git commit -m "Update last tweet index"
+
+    - name: Push changes
+      run: git push
