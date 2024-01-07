@@ -73,6 +73,6 @@ for i in range(last_tweet_index, min(last_tweet_index + 2, len(file_list))):
 
     print(f"Tweeted image: {file['title']}")
 
-# Update the last tweeted frame index in the file
+# Update the last tweeted frame index in the file for two tweets
 with open('last_tweet_index.txt', 'w') as f:
     f.write(str(min(last_tweet_index + 2, len(file_list))))
