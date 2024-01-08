@@ -78,4 +78,4 @@ print(f"Tweeted image: {file['title']}")
 with open('last_tweeted_photo_index.txt', 'w') as f:
     f.write(str(photo_index))
 
-#Everything is working fine
+    #completed
