@@ -45,19 +45,10 @@ drive = GoogleDrive(gauth)
 # Specify the Google Drive folder ID
 folder_id = '1L0MJqJx-qirE9K1Sdy2W2SyYWNo_wY_Q'  # Replace with your folder ID
 
-# Read the last tweeted frame index from the file
-with open('last_tweet_index.txt', 'r') as f:
-    last_tweet_index = int(f.read())
-
 # Retrieve photo files from Google Drive
 file_list = drive.ListFile({'q': f"'{folder_id}' in parents and trashed=false"}).GetList()
 
-# Sort the file list by title
-file_list.sort(key=lambda x: x['title'])
-
-# Tweet the next two frames
-for i in range(last_tweet_index, min(last_tweet_index + 2, len(file_list))):
-    file = file_list[i]
+for file in file_list:
     # Get the image file from Google Drive as a file-like object
     response = requests.get(file['webContentLink'])
     image_file = BytesIO(response.content)
@@ -65,14 +56,7 @@ for i in range(last_tweet_index, min(last_tweet_index + 2, len(file_list))):
     # Upload the image to Twitter
     media = api.media_upload(filename=file['title'], file=image_file)
 
-    # Create the caption
-    caption = f"#DevaraGlimpse - Frame {i+1} of {len(file_list)} Frames"
-
-    # Tweet with the image and caption
+    caption = f"test tweet with image! {random.choice(['#JrNTR', '#Devara', '#Bot'])}"
     tweet = client.create_tweet(text=caption, media_ids=[media.media_id])
 
     print(f"Tweeted image: {file['title']}")
-
-# Update the last tweeted frame index in the file
-with open('last_tweet_index.txt', 'w') as f:
-    f.write(str(min(last_tweet_index + 2, len(file_list))))
