@@ -1,21 +1,26 @@
-name: Run Tweet Bot
+name: Tweet Scheduler
+
 on:
-  push:
-    branches:
-      - main
+  schedule:
+    - cron: '0 * * * *' # This will run the job every hour
+
 jobs:
-  tweet:
+  build:
     runs-on: ubuntu-latest
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
+
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
         python-version: '3.x'
+
     - name: Install dependencies
       run: pip install tweepy pydrive oauth2client requests
-    - name: Run script
+
+    - name: Tweet 1
       run: python tweet.py
       env:
         BEARER_TOKEN: ${{ secrets.BEARER_TOKEN }}
@@ -26,3 +31,26 @@ jobs:
         CLIENT_ID: ${{ secrets.CLIENT_ID }}
         CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
         REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
+
+    - name: Wait 30 minutes
+      run: sleep 1800
+
+    - name: Tweet 2
+      run: python tweet.py
+      env:
+        BEARER_TOKEN: ${{ secrets.BEARER_TOKEN }}
+        CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
+        CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
+        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
+        CLIENT_ID: ${{ secrets.CLIENT_ID }}
+        CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+        REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
+
+    - name: Commit and push last tweeted photo index
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add last_tweeted_photo_index.txt
+        git commit -m "Update last tweeted photo index"
+        git push
