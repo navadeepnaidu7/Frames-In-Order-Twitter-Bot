@@ -55,26 +55,25 @@ file_list.sort(key=lambda x: x['title'])
 with open('last_tweeted_photo_index.txt', 'r') as f:
     last_tweeted_photo_index = int(f.read().strip())
 
-# Calculate the indices of the photos to tweet this time
-start_index = last_tweeted_photo_index + 1
-end_index = start_index + 2
+# Calculate the index of the photo to tweet this time
+photo_index = last_tweeted_photo_index + 1
 
-for i, file in enumerate(file_list[start_index:end_index], start=start_index):
-    # Get the image file from Google Drive as a file-like object
-    response = requests.get(file['webContentLink'])
-    image_file = BytesIO(response.content)
+# Get the image file from Google Drive as a file-like object
+file = file_list[photo_index]
+response = requests.get(file['webContentLink'])
+image_file = BytesIO(response.content)
 
-    # Upload the image to Twitter
-    media = api.media_upload(filename=file['title'], file=image_file)
+# Upload the image to Twitter
+media = api.media_upload(filename=file['title'], file=image_file)
 
-    # Create the caption
-    caption = f"#DevaraGlimpse - tweet {i} of {len(file_list)}"
+# Create the caption
+caption = f"#DevaraGlimpse - tweet {photo_index} of {len(file_list)}"
 
-    # Tweet with the image and caption
-    tweet = client.create_tweet(text=caption, media_ids=[media.media_id])
+# Tweet with the image and caption
+tweet = client.create_tweet(text=caption, media_ids=[media.media_id])
 
-    print(f"Tweeted image: {file['title']}")
+print(f"Tweeted image: {file['title']}")
 
 # Update the index of the last tweeted photo
 with open('last_tweeted_photo_index.txt', 'w') as f:
-    f.write(str(i))
+    f.write(str(photo_index))
