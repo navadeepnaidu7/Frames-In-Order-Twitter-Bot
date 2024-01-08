@@ -13,7 +13,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        pip install tweepy
+        pip install tweepy pydrive oauth2client requests
 
     - name: Tweet 1
       run: python tweet.py
