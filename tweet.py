@@ -77,3 +77,5 @@ print(f"Tweeted image: {file['title']}")
 # Update the index of the last tweeted photo
 with open('last_tweeted_photo_index.txt', 'w') as f:
     f.write(str(photo_index))
+
+    #completed
