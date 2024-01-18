@@ -1,13 +1,12 @@
 import tweepy
 import os
-import random
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
 from oauth2client.client import OAuth2Credentials
 import requests
 from io import BytesIO
 
-# Authenticate using environment variables
+# Tweepy authentication
 bearer_token = os.environ.get("BEARER_TOKEN")
 consumer_key = os.environ.get("CONSUMER_KEY")
 consumer_secret = os.environ.get("CONSUMER_SECRET")
@@ -31,42 +30,41 @@ client = tweepy.Client(
 # Google Drive authentication
 gauth = GoogleAuth()
 gauth.credentials = OAuth2Credentials(
-    access_token=None,  # set access_token to None
-    client_id=os.environ.get("CLIENT_ID"),  # these values are obtained from the "cloud console"
-    client_secret=os.environ.get("CLIENT_SECRET"),  # these values are obtained from the "cloud console"
-    refresh_token=os.environ.get("REFRESH_TOKEN"),  # obtained by running the auth flow on a local machine
+    access_token=None,  
+    client_id=os.environ.get("CLIENT_ID"),  
+    client_secret=os.environ.get("CLIENT_SECRET"),  
+    refresh_token=os.environ.get("REFRESH_TOKEN"),  
     token_expiry=None,
-    token_uri='https://accounts.google.com/o/oauth2/token',  # Google's token URI
-    user_agent='pyDrive',  # you can set this to any string
-    revoke_uri='https://accounts.google.com/o/oauth2/revoke'  # Google's revoke URI
+    token_uri='https://accounts.google.com/o/oauth2/token',  
+    user_agent='pyDrive', 
+    revoke_uri='https://accounts.google.com/o/oauth2/revoke'  
 )
 drive = GoogleDrive(gauth)
 
-# Specify the Google Drive folder ID
-folder_id = '1L0MJqJx-qirE9K1Sdy2W2SyYWNo_wY_Q'  # Replace with your folder ID
+# Google drive folder id https://drive.google.com/drive/u/0/folders/1L0MJqJx-qirE9K1Sdy2W2SyYWNo_wY_Q
+folder_id = '1L0MJqJx-qirE9K1Sdy2W2SyYWNo_wY_Q'  
 
-# Retrieve photo files from Google Drive
 file_list = drive.ListFile({'q': f"'{folder_id}' in parents and trashed=false"}).GetList()
 
-# Sort the file list based on the file names
+# Sorting
 file_list.sort(key=lambda x: x['title'])
 
 # Read the index of the last tweeted photo from a file
 with open('last_tweeted_photo_index.txt', 'r') as f:
     last_tweeted_photo_index = int(f.read().strip())
 
-# Calculate the index of the photo to tweet this time
+# index that need to be tweeted this time
 photo_index = last_tweeted_photo_index + 1
 
-# Get the image file from Google Drive as a file-like object
+# Getting image from Google Drive using BytesIO
 file = file_list[photo_index]
 response = requests.get(file['webContentLink'])
 image_file = BytesIO(response.content)
 
-# Upload the image to Twitter
+# media_upload() will upload the image and return a media object
 media = api.media_upload(filename=file['title'], file=image_file)
 
-# Create the caption
+# Common caption for all tweets
 caption = f"#DevaraGlimpse - Frame {photo_index} of {len(file_list)} Frames."
 
 # Tweet with the image and caption
@@ -74,8 +72,7 @@ tweet = client.create_tweet(text=caption, media_ids=[media.media_id])
 
 print(f"Tweeted image: {file['title']}")
 
-# Update the index of the last tweeted photo
+# Updates the index of the last tweeted photo
 with open('last_tweeted_photo_index.txt', 'w') as f:
     f.write(str(photo_index))
 
-    #completed
