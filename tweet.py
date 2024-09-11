@@ -42,7 +42,7 @@ gauth.credentials = OAuth2Credentials(
 drive = GoogleDrive(gauth)
 
 # Google drive folder id eg https://drive.google.com/drive/u/0/folders/FOLDER_ID
-folder_id = 'FOLDER_ID'  
+folder_id = '1ZWbznR-4-HLHVe1XwLQ_Rm9_oIPxVJPt'  
 
 file_list = drive.ListFile({'q': f"'{folder_id}' in parents and trashed=false"}).GetList()
 
