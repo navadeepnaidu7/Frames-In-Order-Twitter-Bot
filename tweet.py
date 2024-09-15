@@ -6,7 +6,6 @@ from oauth2client.client import OAuth2Credentials
 import requests
 from io import BytesIO
 
-
 # Tweepy authentication
 bearer_token = os.environ.get("BEARER_TOKEN")
 consumer_key = os.environ.get("CONSUMER_KEY")
