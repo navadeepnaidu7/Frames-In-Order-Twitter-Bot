@@ -56,3 +56,4 @@ jobs:
         git commit -m "Update last tweeted photo index"
         git pull origin main
         git push origin main
+
