@@ -65,7 +65,7 @@ image_file = BytesIO(response.content)
 media = api.media_upload(filename=file['title'], file=image_file)
 
 # Common caption for all tweets
-caption = f"#DevaraTrailer - Frame {photo_index} of {len(file_list)} Frames."
+caption = f"#AayudhaPooja - Frame {photo_index} of {len(file_list)} Frames."
 
 # Tweet with the image and caption
 tweet = client.create_tweet(text=caption, media_ids=[media.media_id])
